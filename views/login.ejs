@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>user login</h1>
+     <ul>
+        <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
+        <li><%= error.message %></li>
+        <% }) %> <% } %>
+      </ul>
+  
+      <ul>
+        <% if(messages.success_msg) { %>
+        <li><%= messages.success_msg %></li>
+        <% } %>
+      </ul>
+  
+      <ul>
+        <% if (messages.error) { %>
+        <li><%= messages.error %></li>
+        <% } %>
+      </ul>
+    <form action="/users/login" method="post">
+   
+    <div>
+        <input type="email" id="useremail" name="useremail" placeholder="Email" required>
+    </div>
+  
+
+    <div>
+        <input type="password" id="userpassword" name="userpassword" placeholder="Password" required>
+    </div>
+    
+    <div>
+        <input type="submit" value="login">
+    </div>
+    <a href="/users/register">not registered? sign up here</a>
+</form>
+</body>
+</html>
