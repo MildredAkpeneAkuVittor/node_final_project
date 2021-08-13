@@ -21,14 +21,15 @@ const initialized = require('../config/adminpassportconfig');
  app.get('/admindashboard', checkNotAuthenticated ,(req, res) => {
     res.render("admindashboard")
  });
- app.get('/admindashboard', function(req, res, next) {
-    pool.query(`SELECT * FROM userdata`,  (err, results,fields) => {
-        if (err) {
-          return done(err);
-        }
-        res.render('userdata',{tit})
-      });
- })
+ app.get('/admin/logout', (req, res) => {
+    req.logout();
+    req.flash("success_msg","you are logged out")
+    res.redirect('/admin/adminlogin')
+ });
+ 
+ app.get('/admindashboard', function(req, res) {
+
+ });
  app.post("/adminlogin",
     passport.authenticate("local", {
       successRedirect: "/admin/admindashboard",
@@ -36,6 +37,7 @@ const initialized = require('../config/adminpassportconfig');
       failureFlash: true
     })
   );
+
 
  function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -51,5 +53,13 @@ const initialized = require('../config/adminpassportconfig');
     res.redirect("/admin/adminlogin");
   }
 
-
+//   app.get('/admindashboard', function(req, res) {
+//     const sql = 'SELECT * FROM keystorage ORDER BY id ASC';
+//     pool.query(sql, (error, results) => {
+//         if (error) {
+//             throw error;
+//         }
+//         res.render("admindashboard", {userdata: results.rows})
+//     })
+// });
   module.exports = app;

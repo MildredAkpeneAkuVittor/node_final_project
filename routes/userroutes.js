@@ -152,7 +152,15 @@ app.post("/login",
     res.redirect('/users/login')
  });
 
-
+//  app.get('/admin/admindashboard', function(req, res) {
+//     const sql = 'SELECT * FROM keystorage ORDER BY id ASC';
+//     pool.query(sql, (error, results) => {
+//         if (error) {
+//             throw error;
+//         }
+//         res.render("allItemInfo.ejs", {todoDbList: results.rows})
+//     })
+// });
 
 app.post('/userdashboard',(req, res)=>{
     

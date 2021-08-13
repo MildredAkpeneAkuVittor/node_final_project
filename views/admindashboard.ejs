@@ -7,39 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="table-data">
-        <h2>LIST OF KEYS APPROVED</h2>
-            <table border="1">
-                <tr>
-                    <th>ID</th>
-                    <th>ACCESS_TOKEN</th>
-                    <th>STATUS</th>
-                    <th>START DATE</th>
-                    <th>EXPIRED DATE</th>
-                    
-                </tr>
-                
-                <%
-                if(userdata.length!=0){
-                var i=1;
-                userData.forEach(function(data){
-                %>
-                <tr>
-                    <td><%=i; %></td>
-                    <td><%=userdata.access_key %></td>
-                    <td><%=userdata.status %></td>
-                    <td><%=userdata.start_date %></td>
-                    <td><%=userdata.end_date %></td>
-                    <td><a href="/users/edit/<%=data.id%>">Edit</a></td>
-                    <td><a href="/users/delete/<%=data.id%>">Delete</a></td>
-                </tr>
-                <%  i++; }) %>
-                <% } else{ %>
-                    <tr>
-                        <td colspan="7">No Data Found</td>
-                    </tr>
-                <% } %>
-            </table>
-            </div>
+    <h1>welcome Admin</h1>
+
+    <a href="/admin/logout">logout</a>
 </body>
 </html>
