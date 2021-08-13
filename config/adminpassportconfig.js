@@ -16,6 +16,7 @@ function initialize(passport) {
         console.log(results.rows);
 
         if (results.rows.length > 0) {
+          if (results.rows[0].role==='admin'){
           const user = results.rows[0];
 
           bcrypt.compare(password, user.password, (err, isMatch) => {
@@ -36,6 +37,7 @@ function initialize(passport) {
           });
         }
       }
+    }
     );
   };
 
