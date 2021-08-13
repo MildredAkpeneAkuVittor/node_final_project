@@ -1,5 +1,5 @@
 const express = require ('express');
-const {v4:uuid} = require('uuid');
+
  const { pool } = require("./config/dbconfig")
 
  const bcrypt = require('bcrypt');
@@ -8,9 +8,33 @@ const {v4:uuid} = require('uuid');
 const session = require ('express-session');
 require("dotenv").config();
 
+//const userroutes = require('./userroutes');
+
 const app = express();
 
 const PORT = process.env.PORT || 4000;
+
+const initialized = require('./config/passportconfig');
+  initialized(passport);
+
+//middleware
+app.use(express.urlencoded({extended:false}));
+app.set ("view engine","ejs");
+
+app.use(session(
+    {
+        secret: "secret",
+        resave:false,
+        saveUninitialized: false,
+    }
+));
+
+app.use(passport.initialize());
+
+app.use(passport.session());
+
+
+app.use(flash());
 
 //console.log(uuid());
 
@@ -72,6 +96,11 @@ app.put('/admindashboard/id', async(req,res)=>{
     }
 })
 
+app.get('/users/login', checkAuthenticated, (req, res) => {
+    
+    res.render("login.ejs")
+});
+
 
 //delete
 app.delete('/admindashboard/id', async(req,res)=>{
@@ -90,6 +119,31 @@ app.delete('/admindashboard/id', async(req,res)=>{
 })
 
 
-app.listen(PORT,()=>(
-    console.log(`server is running ${PORT}`)
-));
+app.post("/users/login",
+    passport.authenticate("local", {
+      successRedirect: "/users/userdashboard",
+      failureRedirect: "/users/login",
+      failureFlash: true
+    })
+  );
+  
+  function checkAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return res.redirect("/users/userdashboard");
+    }
+    next();
+  }
+  
+  function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next();
+    }
+    res.redirect("/users/login");
+  }
+
+
+
+
+
+  module.exports = initialize;
+

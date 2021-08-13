@@ -1,7 +1,7 @@
 const express = require ('express');
 
  const { pool } = require("./config/dbconfig")
-
+const admin = require('./adminroutes')
  const bcrypt = require('bcrypt');
  const passport = require('passport');
  const flash = require('express-flash');
@@ -36,6 +36,8 @@ app.use(passport.session());
 
 app.use(flash());
 
+app.use(admin.initialize());
+
 
 
 app.get('/',  (req, res) => {
@@ -58,7 +60,7 @@ app.get('/users/admin',  (req, res) => {
     res.render("admindashboard")
  });
 
- app.get("/users/logout", (req, res) => {
+ app.get('/users/logout', (req, res) => {
      req.logout();
      req.flash("success_msg","you are logged out")
      res.redirect('/users/login')
