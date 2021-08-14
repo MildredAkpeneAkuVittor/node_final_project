@@ -195,7 +195,7 @@ app.post('/userdashboard',(req, res)=>{
         if(err){
           console.log(err)
         }
-        const ack = results.rows[0];
+        const ack = results.rows;
         res.render('userdashboard',{ack})
      })
   
@@ -210,37 +210,9 @@ app.post('/userdashboard',(req, res)=>{
 
 
 //update 
-app.put('/admindashboard/id', async(req,res)=>{
-    try{
-        const {id} = req.params;
-        const{status} = req.body;
-
-        const updatekey = await pool.query("update keystorage SET status = $1 WHERE id =$2", [status,id])
-        
-        res.json("update succesful")
-    
-    }catch(err){
-        console.log(err.message);
-
-    }
-})
 
 
-//delete
-app.delete('/admindashboard/id', async(req,res)=>{
-    try{
-        const {id} = req.params;
-    
 
-        const deletekey = await pool.query("DELETE FROM keystorage  WHERE id =$1", [id])
-        
-        res.json("delete succesful")
-    
-    }catch(err){
-        console.log(err.message);
-
-    }
-})
 
 
 

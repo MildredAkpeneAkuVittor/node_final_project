@@ -54,9 +54,20 @@ const initialized = require('../config/adminpassportconfig');
  });
 
   app.get('/admindashboard', checkNotAuthenticated, async function  (req, res) {
-    const keys = await pool.query( 'SELECT * FROM keystorage ORDER BY id ASC');
+    const keys = await pool.query( 'SELECT * FROM keystorage ORDER BY id DESC');
     const allKeys = keys.rows;
      res.render("admindashboard", {allKeys})
     
 });
+
+app.put('/admindashboard', (req,res)=>{
+    
+    
+
+         pool.query("update keystorage SET status = 'REVOKE' WHERE id =$1")
+        
+        
+    
+    
+})
   module.exports = app;
