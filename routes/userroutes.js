@@ -36,7 +36,7 @@ app.get('/login', checkAuthenticated, (req, res) => {
 
 
 app.get('/userdashboard', checkNotAuthenticated, async function  (req, res) {
-    const keys = await pool.query( 'SELECT * FROM keystorage ORDER BY id ASC');
+    const keys = await pool.query( 'SELECT access_key,status,start_date, EXTRACT(DAY FROM start_date) AS expiry_date FROM keystorage ORDER BY id DESC');
     const allKeys = keys.rows;
      res.render("userdashboard", {allKeys})
     
@@ -209,7 +209,6 @@ app.post('/userdashboard',(req, res)=>{
 
 
 
-//update 
 
 
 

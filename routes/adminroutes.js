@@ -18,9 +18,6 @@ const initialized = require('../config/adminpassportconfig');
   app.get('/adminlogin', checkAuthenticated ,(req, res) => {
      res.render("admin")
      });
-//  app.get('/admindashboard', checkNotAuthenticated ,(req, res) => {
-//     res.render("admindashboard")
-//  });
 
 
 
@@ -54,18 +51,32 @@ const initialized = require('../config/adminpassportconfig');
  });
 
   app.get('/admindashboard', checkNotAuthenticated, async function  (req, res) {
-    const keys = await pool.query( 'SELECT * FROM keystorage ORDER BY id DESC');
+    //   const status
+    // if(status==="active"){
+    //     pool.query("UPDATE keystorage SET status = 'REVOKED' WHERE id = 3", (err, res) => {
+    //         console.log(err, res);
+    //         pool.end();
+    //       });
+            
+    //     }
+    const keys = await pool.query( 'SELECT access_key,status,start_date, EXTRACT(DAY FROM start_date) AS expiry_date FROM keystorage ORDER BY id DESC');
     const allKeys = keys.rows;
      res.render("admindashboard", {allKeys})
+    //  if( 'status' === "active"){
+    //     pool.query("UPDATE keystorage SET '' = 'REVOKED' WHERE id = $1", (err, res) => {
+    //         console.log(err, res);
+    //         pool.end();
+    //       });
+            
+    //     }
     
 });
 
 app.put('/admindashboard', (req,res)=>{
-    
-    
-
-         pool.query("update keystorage SET status = 'REVOKE' WHERE id =$1")
-        
+    pool.query(`UPDATE student SET status = 'revoked' WHERE action <= 5`, (err, res) => {
+        console.log(err, res);
+        pool.end();
+      });
         
     
     

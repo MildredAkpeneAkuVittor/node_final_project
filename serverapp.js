@@ -18,6 +18,12 @@ const PORT = process.env.PORT || 4000;
 const initialized = require('./config/passportconfig');
   initialized(passport);
 
+  const admininitialized = require('./config/adminpassportconfig');
+  admininitialized(passport);
+
+  
+
+
 //middleware
 app.use(express.urlencoded({extended:false}));
 app.set ("view engine","ejs");

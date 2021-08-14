@@ -29,8 +29,10 @@
             <td><%=i; %></td>
             <td><%=key.access_key %></td>
             <td><%=key.status %></td>
+            <td><%=key.start_date %></td>
+            <td><%=key.expiry_date %></td>
             
-            <td><a href="/admindashboard/">Revoke</a></td>
+            <td><a href='/admin/edit/:id'>Revoke</a></td>
             
         </tr>
         <%  i++; }) %>
