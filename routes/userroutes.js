@@ -30,11 +30,17 @@ app.get('/login', checkAuthenticated, (req, res) => {
     
     res.render("login.ejs")
 });
-app.get('/userdashboard', checkNotAuthenticated,  (req, res) => {
-    res.render("userdashboard.ejs");
+// app.get('/userdashboard', checkNotAuthenticated,  (req, res) => {
+//     res.render("userdashboard.ejs");
+// });
+
+
+app.get('/userdashboard', checkNotAuthenticated, async function  (req, res) {
+    const keys = await pool.query( 'SELECT * FROM keystorage ORDER BY id ASC');
+    const allKeys = keys.rows;
+     res.render("userdashboard", {allKeys})
+    
 });
-
-
 
 //get all
 // app.get('/admindashboard',(req, res)=>{
@@ -189,7 +195,8 @@ app.post('/userdashboard',(req, res)=>{
         if(err){
           console.log(err)
         }
-        res.send(results.rows)
+        const ack = results.rows[0];
+        res.render('userdashboard',{ack})
      })
   
     

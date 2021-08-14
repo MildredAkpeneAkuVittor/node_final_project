@@ -18,18 +18,12 @@ const initialized = require('../config/adminpassportconfig');
   app.get('/adminlogin', checkAuthenticated ,(req, res) => {
      res.render("admin")
      });
- app.get('/admindashboard', checkNotAuthenticated ,(req, res) => {
-    res.render("admindashboard")
- });
- app.get('/admin/logout', (req, res) => {
-    req.logout();
-    req.flash("success_msg","you are logged out")
-    res.redirect('/admin/adminlogin')
- });
- 
- app.get('/admindashboard', function(req, res) {
+//  app.get('/admindashboard', checkNotAuthenticated ,(req, res) => {
+//     res.render("admindashboard")
+//  });
 
- });
+
+
  app.post("/adminlogin",
     passport.authenticate("local", {
       successRedirect: "/admin/admindashboard",
@@ -53,13 +47,16 @@ const initialized = require('../config/adminpassportconfig');
     res.redirect("/admin/adminlogin");
   }
 
-//   app.get('/admindashboard', function(req, res) {
-//     const sql = 'SELECT * FROM keystorage ORDER BY id ASC';
-//     pool.query(sql, (error, results) => {
-//         if (error) {
-//             throw error;
-//         }
-//         res.render("admindashboard", {userdata: results.rows})
-//     })
-// });
+  app.get('admin/logout', (req, res) => {
+    req.logout();
+    req.flash("success_msg","you are logged out")
+    res.redirect('/admin/adminlogin')
+ });
+
+  app.get('/admindashboard', checkNotAuthenticated, async function  (req, res) {
+    const keys = await pool.query( 'SELECT * FROM keystorage ORDER BY id ASC');
+    const allKeys = keys.rows;
+     res.render("admindashboard", {allKeys})
+    
+});
   module.exports = app;

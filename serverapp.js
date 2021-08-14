@@ -63,6 +63,12 @@ app.use('/admin', adminroutes)
      res.redirect('/users/login')
   });
 
+  app.get('/admin/logout', (req, res) => {
+    req.logout();
+    req.flash("success_msg","you are logged out")
+    res.redirect('/admin/adminlogin')
+ });
+
   //create
 // app.post('/users/userdashboard',(req, res)=>{
     
