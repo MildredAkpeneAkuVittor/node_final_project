@@ -1,8 +1,6 @@
 const express = require ('express');
-const moment = require('moment');
  const { pool } = require("../config/dbconfig")
- const checktime = require('../checkTime')
-
+ 
  const bcrypt = require('bcrypt');
  const passport = require('passport');
 //require("dotenv").config();
@@ -31,13 +29,11 @@ app.get('/login', checkAuthenticated, (req, res) => {
     
     res.render("login")
 });
-// app.get('/userdashboard', checkNotAuthenticated,  (req, res) => {
-//     res.render("userdashboard.ejs");
-// });
+
 
 
 app.get('/userdashboard', checkNotAuthenticated, async function  (req, res) {
-    const keys = await pool.query( 'SELECT access_key,status, start_date FROM keystorage ORDER BY id DESC');
+    const keys = await pool.query( `SELECT access_key,status, start_date,start_date+interval'5 DAYS' AS expiry_date FROM keystorage ORDER BY id DESC`);
     const allKeys = keys.rows;
      res.render("userdashboard", {allKeys})
     
@@ -132,22 +128,17 @@ passport.authenticate('local'), async (req,res)=> {
       console.log(results.rows[0].roles)
       return res.redirect('userdashboard')
     }
-    // return res.redirect('userdashboard')
+    
     
   }
   catch (err){
     console.log(err)
-    //console.error(err.message)
+    
   }
 
 }) 
 
-    // passport.authenticate("local", {
-    //   successRedirect: "/users/userdashboard",
-    //   failureRedirect: "/users/login",
-    //   failureFlash: true
-    // })
-  // );
+    
   
   function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -168,15 +159,7 @@ passport.authenticate('local'), async (req,res)=> {
     res.redirect('/users/login')
  });
 
-//  app.get('/admin/admindashboard', function(req, res) {
-//     const sql = 'SELECT * FROM keystorage ORDER BY id ASC';
-//     pool.query(sql, (error, results) => {
-//         if (error) {
-//             throw error;
-//         }
-//         res.render("allItemInfo.ejs", {todoDbList: results.rows})
-//     })
-// });
+
 
 app.post('/userdashboard',(req, res)=>{
     
@@ -196,13 +179,10 @@ app.post('/userdashboard',(req, res)=>{
         }
         return keyArray.join("");
     }
-
-    // keyGenerator();
-    // console.log(moment.now)
-  
+ 
     try{
     
-     pool.query(`INSERT INTO keystorage (access_key,status,expiry_date) VALUES($1,$2,$3) RETURNING access_key `,[keyGenerator(),"active",setEpiryDate(nod)],
+     pool.query(`INSERT INTO keystorage (access_key,status) VALUES($1,$2) RETURNING access_key `,[keyGenerator(),"active"],
      (err,results)=>{
         if(err){
           console.log(err)

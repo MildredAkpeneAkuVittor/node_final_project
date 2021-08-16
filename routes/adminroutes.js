@@ -21,13 +21,7 @@ const initialized = require('../config/passportconfig');
 
 
 
-//  app.post("/adminlogin",
-//     passport.authenticate("local", {
-//       // successRedirect: "/admin/admindashboard",
-//       // failureRedirect: "/admin/adminlogin",
-//       // failureFlash: true
-//     })
-//   );
+
 
 
  function checkAuthenticated(req, res, next) {
@@ -57,7 +51,7 @@ const initialized = require('../config/passportconfig');
         errors.push({message:'not authorized'})
         res.render('admin',{errors})
       }
-      // return res.redirect('userdashboard')
+      
       
     }
     catch (err){
@@ -66,13 +60,7 @@ const initialized = require('../config/passportconfig');
     }
   
   })
-  // // ,
-  //     passport.authenticate("local", {
-  //       successRedirect: "/admin/admindashboard",
-  //       failureRedirect: "/admin/login",
-  //       failureFlash: true
-  //     })
-  //   );
+  
   app.get('admin/logout', (req, res) => {
     req.logout();
     req.flash("success_msg","you are logged out")
@@ -80,34 +68,21 @@ const initialized = require('../config/passportconfig');
  });
 
   app.get('/admindashboard', checkNotAuthenticated, async function  (req, res) {
-    //   const status
-    // if(status==="active"){
-    //     pool.query("UPDATE keystorage SET status = 'REVOKED' WHERE id = 3", (err, res) => {
-    //         console.log(err, res);
-    //         pool.end();
-    //       });
-            
-    //     }
-    const keys = await pool.query( 'SELECT access_key,status,start_date FROM keystorage ORDER BY id DESC');
+    
+    const keys = await pool.query( `SELECT access_key,status,start_date,start_date+interval'5 DAYS' AS expiry_date FROM keystorage ORDER BY id DESC`);
     const allKeys = keys.rows;
      res.render("admindashboard", {allKeys})
-    //  if( 'status' === "active"){
-    //     pool.query("UPDATE keystorage SET '' = 'REVOKED' WHERE id = $1", (err, res) => {
-    //         console.log(err, res);
-    //         pool.end();
-    //       });
-            
-    //     }
     
 });
 
-app.put('/admindashboard', (req,res)=>{
-    pool.query(`UPDATE student SET status = 'revoked' WHERE action <= 5`, (err, res) => {
-        console.log(err, res);
-        pool.end();
-      });
+app.put('/admindashboard',async (req,res)=>{
+  const keys = await pool.query( `SELECT access_key,status,start_date,start_date+interval'5 DAYS' AS expiry_date FROM keystorage ORDER BY id DESC`);
+  if(keys.rows.expiry_date === Date.now ){
+    pool.query(`UPDATE student SET status = 'revoked' `);
+  }
+  
         
-    
+  
     
 })
   module.exports = app;
