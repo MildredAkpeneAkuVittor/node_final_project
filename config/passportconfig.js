@@ -5,31 +5,39 @@ const bcrypt = require("bcrypt");
 function initialize(passport) {
   
 
-  const authenticateUser = (email, password, done) => {
+  const authenticate =  (useremail, userpassword, done) => {
    
   pool.query(
-      `SELECT * FROM userdata WHERE email = $1`,[email],
+      `SELECT * FROM userdata WHERE email = $1`,[useremail],
       (err, results) => {
         if (err) {
           throw err;
         }
-        console.log(results.rows);
+        //console.log(results.rows);
 
         if (results.rows.length > 0) {
           const user = results.rows[0];
 
-          bcrypt.compare(password, user.password, (err, isMatch) => {
+          bcrypt.compare(userpassword, user.password, (err, isMatch) => {
+            
             if (err) {
               throw err;
             }
             if (isMatch) {
-              return done(null, user);
-            } else {
+              return done(null,user);
+            } 
+            
+                
+            else {
               //password is incorrect
               return done(null, false, { message: "Password is incorrect" });
             }
           });
-        } else {
+        } 
+        
+        
+        
+        else {
           // No user
           return done(null, false, {
             message: "No user with that email address"
@@ -42,7 +50,7 @@ function initialize(passport) {
   passport.use(
     new LocalStrategy(
       { usernameField: "useremail", passwordField: "userpassword" },
-      authenticateUser
+      authenticate
     )
   );
  

@@ -1,6 +1,7 @@
 const express = require ('express');
-
+const moment = require('moment');
  const { pool } = require("../config/dbconfig")
+ const checktime = require('../checkTime')
 
  const bcrypt = require('bcrypt');
  const passport = require('passport');
@@ -28,7 +29,7 @@ app.get('/register', checkAuthenticated,  (req, res) => {
 });
 app.get('/login', checkAuthenticated, (req, res) => {
     
-    res.render("login.ejs")
+    res.render("login")
 });
 // app.get('/userdashboard', checkNotAuthenticated,  (req, res) => {
 //     res.render("userdashboard.ejs");
@@ -36,24 +37,13 @@ app.get('/login', checkAuthenticated, (req, res) => {
 
 
 app.get('/userdashboard', checkNotAuthenticated, async function  (req, res) {
-    const keys = await pool.query( 'SELECT access_key,status,start_date, EXTRACT(DAY FROM start_date) AS expiry_date FROM keystorage ORDER BY id DESC');
+    const keys = await pool.query( 'SELECT access_key,status, start_date FROM keystorage ORDER BY id DESC');
     const allKeys = keys.rows;
      res.render("userdashboard", {allKeys})
     
 });
 
-//get all
-// app.get('/admindashboard',(req, res)=>{
-//    try{
-//  const keystorage = pool.query(`SELECT * FROM keystorage`);
-//     res.json(keystorage.rows)
 
-// }catch(err){
-//     console.log(err.message);
-// }
-
-
-// });
 
 
 
@@ -131,13 +121,33 @@ app.post("/register",  async function (req,res) {
 
 });
 
-app.post("/login",
-    passport.authenticate("local", {
-      successRedirect: "/users/userdashboard",
-      failureRedirect: "/users/login",
-      failureFlash: true
-    })
-  );
+app.post('/login', 
+passport.authenticate('local'), async (req,res)=> {
+  const {useremail} = req.body
+  let results = await pool.query(`SELECT * FROM userdata WHERE email = $1`,[useremail])
+  
+  try{
+    if(results.rows[0].roles === null || results.rows[0].roles ==='admin'){
+      
+      console.log(results.rows[0].roles)
+      return res.redirect('userdashboard')
+    }
+    // return res.redirect('userdashboard')
+    
+  }
+  catch (err){
+    console.log(err)
+    //console.error(err.message)
+  }
+
+}) 
+
+    // passport.authenticate("local", {
+    //   successRedirect: "/users/userdashboard",
+    //   failureRedirect: "/users/login",
+    //   failureFlash: true
+    // })
+  // );
   
   function checkAuthenticated(req, res, next) {
     if (req.isAuthenticated()) {
@@ -186,17 +196,20 @@ app.post('/userdashboard',(req, res)=>{
         }
         return keyArray.join("");
     }
-    keyGenerator();
+
+    // keyGenerator();
+    // console.log(moment.now)
   
     try{
     
-     pool.query(`INSERT INTO keystorage (access_key,status) VALUES($1,$2) RETURNING access_key `,[keyGenerator(),"active"],
+     pool.query(`INSERT INTO keystorage (access_key,status,expiry_date) VALUES($1,$2,$3) RETURNING access_key `,[keyGenerator(),"active",setEpiryDate(nod)],
      (err,results)=>{
         if(err){
           console.log(err)
         }
-        const ack = results.rows;
-        res.render('userdashboard',{ack})
+        
+        const allKeys = results.rows;
+     res.render("userdashboard", {allKeys})
      })
   
     

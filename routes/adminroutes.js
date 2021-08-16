@@ -10,7 +10,7 @@ const app = express.Router();
 
 
 
-const initialized = require('../config/adminpassportconfig');
+const initialized = require('../config/passportconfig');
   initialized(passport);
 
   app.use(passport.initialize());
@@ -21,13 +21,13 @@ const initialized = require('../config/adminpassportconfig');
 
 
 
- app.post("/adminlogin",
-    passport.authenticate("local", {
-      successRedirect: "/admin/admindashboard",
-      failureRedirect: "/admin/adminlogin",
-      failureFlash: true
-    })
-  );
+//  app.post("/adminlogin",
+//     passport.authenticate("local", {
+//       // successRedirect: "/admin/admindashboard",
+//       // failureRedirect: "/admin/adminlogin",
+//       // failureFlash: true
+//     })
+//   );
 
 
  function checkAuthenticated(req, res, next) {
@@ -41,9 +41,38 @@ const initialized = require('../config/adminpassportconfig');
     if (req.isAuthenticated()) {
       return next();
     }
-    res.redirect("/admin/adminlogin");
+    res.redirect("/adminlogin");
   }
-
+  app.post("/adminlogin",
+   passport.authenticate('local'), async(req,res)=> {
+    const {useremail}= req.body
+    let errors=[]
+    let results = await pool.query(`select * FROM userdata WHERE email = $1`, [useremail]);
+    try{
+      if(results.rows[0].roles ==='admin'){
+        
+        return res.redirect('admindashboard')
+      }
+      else{
+        errors.push({message:'not authorized'})
+        res.render('admin',{errors})
+      }
+      // return res.redirect('userdashboard')
+      
+    }
+    catch (err){
+      console.log("error")
+      console.error(err.message)
+    }
+  
+  })
+  // // ,
+  //     passport.authenticate("local", {
+  //       successRedirect: "/admin/admindashboard",
+  //       failureRedirect: "/admin/login",
+  //       failureFlash: true
+  //     })
+  //   );
   app.get('admin/logout', (req, res) => {
     req.logout();
     req.flash("success_msg","you are logged out")
@@ -59,7 +88,7 @@ const initialized = require('../config/adminpassportconfig');
     //       });
             
     //     }
-    const keys = await pool.query( 'SELECT access_key,status,start_date, EXTRACT(DAY FROM start_date) AS expiry_date FROM keystorage ORDER BY id DESC');
+    const keys = await pool.query( 'SELECT access_key,status,start_date FROM keystorage ORDER BY id DESC');
     const allKeys = keys.rows;
      res.render("admindashboard", {allKeys})
     //  if( 'status' === "active"){
