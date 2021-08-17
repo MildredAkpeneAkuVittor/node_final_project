@@ -79,7 +79,7 @@ app.post("/register",  async function (req,res) {
           //validation passed
 
           let hashedpassword = await bcrypt.hash(userpassword,10);
-          console.log(hashedpassword);
+          // console.log(hashedpassword);
 
           pool.query(
             `SELECT * FROM userdata
@@ -104,7 +104,7 @@ app.post("/register",  async function (req,res) {
                     if (err) {
                       throw err;
                     }
-                    console.log(results.rows);
+                    // console.log(results.rows);
                     req.flash("success_msg", "You are now registered. Please log in");
                     res.redirect("/users/login");
                   }
@@ -125,7 +125,7 @@ passport.authenticate('local'), async (req,res)=> {
   try{
     if(results.rows[0].roles === null || results.rows[0].roles ==='admin'){
       
-      console.log(results.rows[0].roles)
+      // console.log(results.rows[0].roles)
       return res.redirect('userdashboard')
     }
     

@@ -2,6 +2,8 @@ require("dotenv").config();
 
 const { Pool } = require("pg");
 
+// postgres query
+
 
 const isProduction = process.env.NODE_ENV === "production";
 

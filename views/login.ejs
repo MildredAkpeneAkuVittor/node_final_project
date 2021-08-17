@@ -12,6 +12,7 @@
 </head>
 <body>
     <h1>user login</h1>
+    <!-- display error and succes messages to user -->
      <ul>
         <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
         <li><%= error.message %></li>
@@ -29,6 +30,7 @@
         <li><%= messages.error %></li>
         <% } %>
       </ul>
+      <!-- user login -->
     <form action="/users/login" method="post">
    
     <div>

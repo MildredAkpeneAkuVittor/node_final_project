@@ -1,6 +1,6 @@
 const express = require ('express');
 
- const { pool } = require("./config/dbconfig")
+ const { pool } = require("./src/config/dbconfig")
  const bcrypt = require('bcrypt');
  const passport = require('passport');
  const flash = require('express-flash');
@@ -9,14 +9,14 @@ const session = require ('express-session');
 
 require("dotenv").config();
 
-const userroutes = require('./routes/userroutes');
-const adminroutes = require('./routes/adminroutes');
+const userroutes = require('./src/routes/userroutes');
+const adminroutes = require('./src/routes/adminroutes');
 
 const app = express();
 
 const PORT = process.env.PORT || 4000;
 
-const initialized = require('./config/passportconfig');
+const initialized = require('./src/config/passportconfig');
   initialized(passport);
 
   
