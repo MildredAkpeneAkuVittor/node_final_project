@@ -63,6 +63,21 @@ app.use('/admin', adminroutes)
     res.redirect('/admin/adminlogin')
  });
 
+ app.get('/status/edit/:id', async(req, res)=>{
+    const id =req.params.id
+    const status = await pool.query( `SELECT status FROM keystorage where id = $1`,[id]);
+        const newst = status.rows[0];
+        if(newst.status === 'active'){
+           await pool.query(`UPDATE keystorage SET status = 'revoked' where id =$1`,[id])
+        }
+        res.redirect('/admin/admindashboard')
+  }
+  )  ;  
+//   a
+// pp.post('/status/edit/:id', (req, res)=>{
+//     console.log(req.params.id)
+//     res.send ('revoke key');
+//   })  
 
 
 

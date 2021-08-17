@@ -43,8 +43,7 @@
             <td><%=key.status %></td>
             <td><%=key.start_date %></td>
             <td><%=key.expiry_date %></td>
-            
-            <td><a href='/admin/edit/:id'>Revoke</a></td>
+            <td><a href='/status/edit/<%=key.id%>'>Revoke</a></td>
             
         </tr>
         <%  i++; }) %>

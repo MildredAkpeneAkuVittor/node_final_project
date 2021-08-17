@@ -67,9 +67,11 @@ const initialized = require('../config/passportconfig');
     res.redirect('/admin/adminlogin')
  });
 
+ 
   app.get('/admindashboard', checkNotAuthenticated, async function  (req, res) {
+
     
-    const keys = await pool.query( `SELECT access_key,status,start_date,start_date+interval'5 DAYS' AS expiry_date FROM keystorage ORDER BY id DESC`);
+    const keys = await pool.query( `SELECT id, access_key,status,start_date,start_date+interval'5 DAYS' AS expiry_date FROM keystorage ORDER BY id DESC`);
     const allKeys = keys.rows;
      res.render("admindashboard", {allKeys})
     
@@ -81,8 +83,8 @@ app.put('/admindashboard',async (req,res)=>{
     pool.query(`UPDATE student SET status = 'revoked' `);
   }
   
-        
-  
+    
+
     
 })
   module.exports = app;
