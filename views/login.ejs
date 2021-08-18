@@ -6,11 +6,14 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css"
     />
+    <link rel="stylesheet" href="/style.css">
+    
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
 <body>
+  <div class = "login">
     <h1>user login</h1>
     <!-- display error and succes messages to user -->
      <ul>
@@ -30,6 +33,9 @@
         <li><%= messages.error %></li>
         <% } %>
       </ul>
+
+      <a href="/users/register"  class="btn btn-primary btn-block btn-large">not registered? sign up here</a>
+      <a href="/admin/adminlogin" class="btn btn-primary btn-block btn-large">Admin? login here</a>
       <!-- user login -->
     <form action="/users/login" method="post">
    
@@ -43,10 +49,10 @@
     </div>
     
     <div>
-        <input type="submit" value="login">
+        <input type="submit" value="login"  class="btn btn-primary btn-block btn-large">
     </div>
-    <a href="/users/register">not registered? sign up here</a>
-    <a href="/admin/adminlogin">Admin? login here</a>
+   
 </form>
+</div>
 </body>
 </html>

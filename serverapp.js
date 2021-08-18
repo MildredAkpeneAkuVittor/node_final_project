@@ -28,6 +28,8 @@ const initialized = require('./src/config/passportconfig');
 app.use(express.urlencoded({extended:false}));
 app.set ("view engine","ejs");
 
+app.use(express.static(__dirname+'/src/public/'))
+
 app.use(session(
     {
         secret: "secret",
@@ -73,11 +75,7 @@ app.use('/admin', adminroutes)
         res.redirect('/admin/admindashboard')
   }
   )  ;  
-//   a
-// pp.post('/status/edit/:id', (req, res)=>{
-//     console.log(req.params.id)
-//     res.send ('revoke key');
-//   })  
+
 
 
 
