@@ -1,5 +1,5 @@
 const express = require ('express');
- const { pool } = require("../config/dbconfig")
+const { pool } = require("../config/dbconfig")
  
  const bcrypt = require('bcrypt');
  const passport = require('passport');
