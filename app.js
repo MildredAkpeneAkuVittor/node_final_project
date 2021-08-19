@@ -1,6 +1,6 @@
 const express = require ('express');
 
- const { pool } = require("./src/config/dbconfig")
+ const { pool } = require("./config/dbconfig")
  const bcrypt = require('bcrypt');
  const passport = require('passport');
  const flash = require('express-flash');
@@ -9,26 +9,21 @@ const session = require ('express-session');
 
 require("dotenv").config();
 
-const userroutes = require('./src/routes/userroutes');
-const adminroutes = require('./src/routes/adminroutes');
+const userroutes = require('./routes/userroutes');
+const adminroutes = require('./routes/adminroutes');
 
 const app = express();
 
 const PORT = process.env.PORT || 4000;
 
-const initialized = require('./src/config/passportconfig');
+const initialized = require('./config/passportconfig');
   initialized(passport);
-
   
-
-  
-
-
 //middleware
 app.use(express.urlencoded({extended:false}));
 app.set ("view engine","ejs");
 
-app.use(express.static(__dirname+'/src/public/'))
+app.use(express.static(__dirname+'/public/'))
 
 app.use(session(
     {
