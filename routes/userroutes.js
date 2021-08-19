@@ -22,17 +22,17 @@ app.use(passport.initialize());
 app.get('/',  (req, res) => {
     res.render("index")
 });
-app.get('/register', checkAuthenticated,  (req, res) => {
+app.get('/users/register', checkAuthenticated,  (req, res) => {
     res.render("register.ejs")
 });
-app.get('/login', checkAuthenticated, (req, res) => {
+app.get('/users/login', checkAuthenticated, (req, res) => {
     
     res.render("login")
 });
 
 
 
-app.get('/userdashboard', checkNotAuthenticated, async function  (req, res) {
+app.get('/users/userdashboard', checkNotAuthenticated, async function  (req, res) {
     const keys = await pool.query( `SELECT access_key,status, start_date,start_date+interval'5 DAYS' AS expiry_date FROM keystorage ORDER BY id DESC`);
     const allKeys = keys.rows;
      res.render("userdashboard", {allKeys})
@@ -46,7 +46,7 @@ app.get('/userdashboard', checkNotAuthenticated, async function  (req, res) {
 
 
 //create
-app.post("/register",  async function (req,res) {
+app.post("/users/register",  async function (req,res) {
 
    
     let { username, useremail, schoolname, userpassword, userpassword2 } = req.body;
@@ -117,7 +117,7 @@ app.post("/register",  async function (req,res) {
 
 });
 
-app.post('/login', 
+app.post('/users/login', 
 passport.authenticate('local'), async (req,res)=> {
   const {useremail} = req.body
   let results = await pool.query(`SELECT * FROM userdata WHERE email = $1`,[useremail])
@@ -161,7 +161,7 @@ passport.authenticate('local'), async (req,res)=> {
 
 
 
-app.post('/userdashboard',(req, res)=>{
+app.post('/users/userdashboard',(req, res)=>{
     
     
 
@@ -199,14 +199,6 @@ app.post('/userdashboard',(req, res)=>{
   });
   
  
-
-
-
-
-
-
-
-
 
 
 module.exports = app

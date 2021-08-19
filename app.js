@@ -47,7 +47,7 @@ app.use(passport.session());
 app.use(flash());
 
 
-app.use('/users', userroutes)
+app.use('/', userroutes)
 app.use('/admin', adminroutes)
 
 
