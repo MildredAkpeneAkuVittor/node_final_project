@@ -6,6 +6,7 @@ const { pool } = require("./config/dbconfig");
  const passport = require('passport');
  const flash = require('express-flash');
 const session = require ('express-session');
+const pgsession = require('connect-pg-simple')(session);
 
 
 require("dotenv").config();
@@ -28,6 +29,10 @@ app.use(express.static(__dirname+'/public/'))
 
 app.use(session(
     {
+      store: new pgsession({
+        pool: pool,
+        tableName: "session"
+      }),
         secret: "secret",
         resave:false,
         saveUninitialized: false,
