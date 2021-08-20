@@ -15,6 +15,7 @@
 <body>
   <div class = "login">
     <h1>user login</h1>
+    <a href="/" class="btn btn-primary">HOME</a>
     <!-- display error and succes messages to user -->
      <ul>
         <% if (typeof errors != 'undefined') { %> <% errors.forEach(error => { %>
@@ -34,8 +35,7 @@
         <% } %>
       </ul>
 
-      <a href="/users/register"  class="btn btn-primary btn-block btn-large">not registered? sign up here</a>
-      <a href="/admin/adminlogin" class="btn btn-primary btn-block btn-large">Admin? login here</a>
+     
       <!-- user login -->
     <form action="/users/login" method="post">
    
@@ -53,6 +53,9 @@
     </div>
    
 </form>
+
+<a href="/users/register"  class="btn btn-primary btn-block btn-large">not registered? sign up here</a>
+<a href="/admin/adminlogin" class="btn btn-primary btn-block btn-large">Admin? login here</a>
 </div>
 </body>
 </html>
